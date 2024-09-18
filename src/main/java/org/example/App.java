@@ -11,16 +11,18 @@ public class App {
         String val;
 
         do {
-            // Meny
-            System.out.print("Elpriser\n");
-            System.out.print("========\n");
-            System.out.print("1. Inmatning\n");
-            System.out.print("2. Min, Max och Medel\n");
-            System.out.print("3. Sortera\n");
-            System.out.print("4. Bästa Laddningstid (4h)\n");
-            System.out.print("5. Visualisering\n");
-            System.out.print("e. Avsluta\n");
+            String menu = """
+            Elpriser
+            ========
+            1. Inmatning
+            2. Min, Max och Medel
+            3. Sortera
+            4. Bästa Laddningstid (4h)
+            5. Visualisering
+            e. Avsluta
+            """;
 
+            System.out.print(menu);
             val = scanner.nextLine();
 
             switch (val) {
@@ -37,7 +39,7 @@ public class App {
                     bästaLaddningstid();
                     break;
                 case "5":
-
+                    visualisering();
                     break;
                 case "e":
                 case "E":
@@ -53,7 +55,7 @@ public class App {
 
     private static void inmatning(Scanner scanner) {
         System.out.print("Skriv in elpriserna för varje timme (0-23):\n");
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i <= 23; i++) {
             System.out.print(i + ": ");
             priser[i] = Integer.parseInt(scanner.nextLine());
         }
@@ -77,9 +79,17 @@ public class App {
         }
 
         double medel = total / 24.0;
-        System.out.printf("Lägsta pris: %d öre vid timme %02d-%02d\n", min, minHour, minHour + 1);
-        System.out.printf("Högsta pris: %d öre vid timme %02d-%02d\n", max, maxHour, maxHour + 1);
-        System.out.printf("Medelpriset: %.2f öre\n", medel);
+
+        String response = String.format("""
+            Lägsta pris: %02d-%02d, %d öre/kWh
+            Högsta pris: %02d-%02d, %d öre/kWh
+            Medelpris: %.2f öre/kWh
+            """,
+                minHour, minHour + 1, min,
+                maxHour, maxHour + 1, max,
+                medel);
+
+        System.out.print(response);
     }
 
     private static void sortera() {
@@ -99,9 +109,12 @@ public class App {
             }
         }
 
-        System.out.print("Priserna sorterade från högst till lägst:\n");
         for (int i : sorted) {
-            System.out.printf("%02d-%02d %d öre\n", i, (i + 1) % 24, priser[i]);
+            String response = String.format("""
+            %02d-%02d %d öre
+            """ , i , (i + 1) % 24, priser[i]);
+
+            System.out.print(response);
         }
     }
 
@@ -118,7 +131,51 @@ public class App {
         }
 
         double medel = minTotal / 4.0;
-        System.out.printf("Påbörja laddningen klockan %02d:00\n Medelpris 4h: %.2f öre/kWh\n", startHour, medel);
+
+        String response = String.format("""
+        Påbörja laddning klockan %02d
+        Medelpris 4h: %.1f öre/kWh
+        """,
+            startHour, medel);
+
+        System.out.printf(response);
+    }
+
+    private static void visualisering() {
+        int maxPrice = 0;
+        for (int price : priser) {
+            if (price > maxPrice) {
+                maxPrice = price;
+            }
+        }
+
+        int scale = (maxPrice / 10) + 1;
+
+        for (int i = scale * 10; i >= 0; i -= 10) {
+            System.out.printf("%3d| ", i);
+            for (int j = 0; j < 24; j++){
+                if (priser[j] >= i){
+                    System.out.print("x  ");
+                }
+                else {
+                    System.out.print("");
+                }
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("   |");
+        for (int j = 0; j < 24; j++) {
+            System.out.printf("---");
+        }
+        System.out.print("\n");
+
+        System.out.print("   |");
+        for (int j = 0; j < 24; j++) {
+            System.out.printf("%02d", j);
+            System.out.print(" ");
+        }
+        System.out.print("\n");
     }
 
 }
