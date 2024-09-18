@@ -31,10 +31,10 @@ public class App {
                     minMaxMedel();
                     break;
                 case "3":
-
+                    sortera();
                     break;
                 case "4":
-
+                    bästaLaddningstid();
                     break;
                 case "5":
 
@@ -81,4 +81,44 @@ public class App {
         System.out.printf("Högsta pris: %d öre vid timme %02d-%02d\n", max, maxHour, maxHour + 1);
         System.out.printf("Medelpriset: %.2f öre\n", medel);
     }
+
+    private static void sortera() {
+        int[] sorted  = new int[24];
+
+        for (int i = 0; i < 24; i++) {
+            sorted[i] = i;
+        }
+
+        for (int i = 0; i < 24; i++) {
+            for (int j = i + 1; j < 24; j++) {
+                if (priser[sorted[i]] < priser[sorted[j]]) {
+                    int temp = sorted[i];
+                    sorted[i] = sorted[j];
+                    sorted[j] = temp;
+                }
+            }
+        }
+
+        System.out.print("Priserna sorterade från högst till lägst:\n");
+        for (int i : sorted) {
+            System.out.printf("%02d-%02d %d öre\n", i, (i + 1) % 24, priser[i]);
+        }
+    }
+
+    private static void bästaLaddningstid() {
+        int minTotal = Integer.MAX_VALUE;
+        int startHour = 0;
+
+        for (int i = 0; i <= 20; i++) { // Man kan börja ladda mellan timme 0-20
+            int total = priser[i] + priser[i + 1] + priser[i + 2] + priser[i + 3];
+            if (total < minTotal) {
+                minTotal = total;
+                startHour = i;
+            }
+        }
+
+        double medel = minTotal / 4.0;
+        System.out.printf("Påbörja laddningen klockan %02d:00\n Medelpris 4h: %.2f öre/kWh\n", startHour, medel);
+    }
+
 }
