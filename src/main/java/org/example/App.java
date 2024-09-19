@@ -101,7 +101,8 @@ public class App {
 
         for (int i = 0; i < 24; i++) {
             for (int j = i + 1; j < 24; j++) {
-                if (priser[sorted[i]] < priser[sorted[j]]) {
+                if (priser[sorted[i]] < priser[sorted[j]] ||
+                        (priser[sorted[i]] == priser[sorted[j]] && sorted[i] > sorted[j])) {
                     int temp = sorted[i];
                     sorted[i] = sorted[j];
                     sorted[j] = temp;
@@ -110,13 +111,24 @@ public class App {
         }
 
         for (int i : sorted) {
-            String response = String.format("""
+            int nextHour = (i + 1) % 24;
+            String response;
+
+            // Specialregel för att visa "23-24" istället för "23-00"
+            if (i == 23) {
+                response = String.format("""
             %02d-%02d %d öre
-            """ , i , (i + 1) % 24, priser[i]);
+            """, i, 24, priser[i]);
+            } else {
+                response = String.format("""
+            %02d-%02d %d öre
+            """, i, nextHour, priser[i]);
+            }
 
             System.out.print(response);
         }
     }
+
 
     private static void bästaLaddningstid() {
         int minTotal = Integer.MAX_VALUE;
