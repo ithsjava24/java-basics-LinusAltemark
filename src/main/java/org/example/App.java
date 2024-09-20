@@ -18,7 +18,6 @@ public class App {
             2. Min, Max och Medel
             3. Sortera
             4. Bästa Laddningstid (4h)
-            5. Visualisering
             e. Avsluta
             """;
 
@@ -38,9 +37,9 @@ public class App {
                 case "4":
                     bästaLaddningstid();
                     break;
-                case "5":
+                /*case "5":
                     visualisering();
-                    break;
+                    break;*/
                 case "e":
                 case "E":
                     System.out.print("Avslutar programmet.\n");
@@ -153,7 +152,7 @@ public class App {
         System.out.printf(response);
     }
 
-    private static void visualisering() {
+    /*private static void visualisering() {
         int maxPrice = 0;
         for (int price : priser) {
             if (price > maxPrice) {
@@ -188,6 +187,6 @@ public class App {
             System.out.print(" ");
         }
         System.out.print("\n");
-    }
+    }*/
 
 }
