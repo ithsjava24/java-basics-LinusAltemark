@@ -1,12 +1,12 @@
 package org.example;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class App {
 
-    private static int[] priser = new int[24];
-
     public static void main(String[] args) {
+        Locale.setDefault(new Locale("sv","SE"));
         Scanner scanner = new Scanner(System.in);
         String val;
 
@@ -51,6 +51,8 @@ public class App {
 
         scanner.close();
     }
+
+    private static int[] priser = new int[24];
 
     private static void inmatning(Scanner scanner) {
         System.out.print("Skriv in elpriserna för varje timme (0-23):\n");
